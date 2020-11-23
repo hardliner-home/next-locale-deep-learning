@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { withTranslation, Router, i18n } from '../i18n'
-import { useRouter } from 'next/router'
 import axios from 'axios'
 import map from 'lodash/map'
+import head from 'lodash/head'
 import concat from 'lodash/concat'
 import Head from 'next/head'
 
 function Index({response, error, t}) {
   error && console.log('error', error)
-  const router = useRouter()
   const [questions, setQuestions] = useState([])
 
   useEffect(() => {
@@ -20,12 +19,12 @@ function Index({response, error, t}) {
       <Head>
         <title>Locale-SSR</title>
       </Head>
-      <div>Current lang context: {}</div>
       <div>Current lang translation: {t('language')}</div>
-      <div>page : {router.query.page || 1}</div>
       {questions && map(questions, (question, key) => (
         <div key={key}>
           <div>{question.title}</div>
+          {head(question.images) && <img src={head(question.images).thumb_url} />}
+          <button onClick={() => Router.push({pathname: `/questions/${question.slug}`})}>to question</button>
         </div>
       ))}
 
